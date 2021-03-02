@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import {useMap} from '../../contexts/maps';
@@ -6,11 +6,14 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {syncNotes} from '../../services/sync';
 import FloatingButton from '../../components/FloatingButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Map: React.FC<StackScreenProps<{}>> = ({navigation}) => {
   const {notes, setNotes} = useMap();
+  const [synchronizing, setSynchronizing] = useState(false);
 
   const syncHandler = useCallback(async () => {
+    setSynchronizing(true);
     const ids = await syncNotes(notes);
 
     setNotes((prev) =>
@@ -25,6 +28,7 @@ const Map: React.FC<StackScreenProps<{}>> = ({navigation}) => {
         return note;
       }),
     );
+    setSynchronizing(false);
   }, [notes, setNotes]);
 
   return (
@@ -45,6 +49,11 @@ const Map: React.FC<StackScreenProps<{}>> = ({navigation}) => {
           </Marker>
         ))}
       </MapView>
+      <Spinner
+        visible={synchronizing}
+        textContent={'Sincronização em andamento...'}
+        textStyle={{color: '#fff'}}
+      />
       <FloatingButton icon="refresh" theme="secondary" onPress={syncHandler} />
       <FloatingButton icon="plus" onPress={() => navigation.navigate('note')} />
     </>
