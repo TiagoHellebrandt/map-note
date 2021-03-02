@@ -27,7 +27,7 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
           height: 40px;
           background-color: #ddd;
           right: 10px;
-          top: 10px;
+          top: 60px;
         `;
       default:
         return css`
