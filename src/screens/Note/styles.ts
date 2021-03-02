@@ -37,3 +37,7 @@ export const Details = styled.View`
 export const InfoText = styled.Text`
   font-size: 16px;
 `;
+
+export const ContainerButtonSave = styled.View`
+  margin-right: 20;
+`;

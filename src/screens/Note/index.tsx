@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useLayoutEffect, useEffect} from 'react';
-import {View, Button, Text, Alert} from 'react-native';
+import {Button, Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from '../../types';
@@ -8,7 +8,15 @@ import {Marker} from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {format} from 'date-fns';
 
-import {Container, Map, Input, Annotation, Details, InfoText} from './styles';
+import {
+  Container,
+  Map,
+  Input,
+  Annotation,
+  Details,
+  InfoText,
+  ContainerButtonSave,
+} from './styles';
 
 const Note: React.FC<StackScreenProps<RootStackParamList, 'note'>> = ({
   navigation,
@@ -44,9 +52,9 @@ const Note: React.FC<StackScreenProps<RootStackParamList, 'note'>> = ({
         }
 
         return (
-          <View style={{marginRight: 20}}>
+          <ContainerButtonSave>
             <Button title="Salvar" onPress={saveHandler} />
-          </View>
+          </ContainerButtonSave>
         );
       },
     });
