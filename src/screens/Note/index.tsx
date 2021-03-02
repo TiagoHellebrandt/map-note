@@ -95,8 +95,13 @@ const Note: React.FC<StackScreenProps<RootStackParamList, 'note'>> = ({
             coordinate={{
               latitude: region.latitude,
               longitude: region.longitude,
-            }}
-          />
+            }}>
+            <Icon
+              name="map-pin"
+              size={30}
+              color={route.params.note.isSync ? '#555' : '#61b15a'}
+            />
+          </Marker>
         )}
       </Map>
       {route.params?.note ? (

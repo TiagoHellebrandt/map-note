@@ -5,6 +5,7 @@ import {useMap} from '../../contexts/maps';
 import {StackScreenProps} from '@react-navigation/stack';
 import {syncNotes} from '../../services/sync';
 import FloatingButton from '../../components/FloatingButton';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Map: React.FC<StackScreenProps<{}>> = ({navigation}) => {
   const {notes, setNotes} = useMap();
@@ -35,8 +36,13 @@ const Map: React.FC<StackScreenProps<{}>> = ({navigation}) => {
             coordinate={{latitude: note.latitude, longitude: note.longitude}}
             title="Anotação"
             description={note.note}
-            onPress={() => navigation.navigate('note', {note})}
-          />
+            onPress={() => navigation.navigate('note', {note})}>
+            <Icon
+              name="map-pin"
+              size={30}
+              color={note.isSync ? '#555' : '#61b15a'}
+            />
+          </Marker>
         ))}
       </MapView>
       <FloatingButton icon="refresh" theme="secondary" onPress={syncHandler} />
