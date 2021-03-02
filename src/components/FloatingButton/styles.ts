@@ -1,8 +1,7 @@
-import styled, { css } from 'styled-components/native';
-import { TouchableOpacityProps } from 'react-native';
+import styled, {css} from 'styled-components/native';
 
 interface ContainerProps {
-  theme?: 'primary' |  'secondary';
+  theme?: 'primary' | 'secondary';
 }
 
 export const Container = styled.TouchableOpacity<ContainerProps>`
@@ -16,19 +15,23 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
   justify-content: center;
   align-items: center;
 
-  ${({ theme }) => {
+  ${({theme}) => {
     switch (theme) {
       case 'primary':
         return css`
-          background-color: #B6D52E;
+          background-color: #00a82d;
         `;
       case 'secondary':
         return css`
+          width: 40px;
+          height: 40px;
           background-color: #ddd;
+          right: 10px;
+          top: 10px;
         `;
       default:
         return css`
-          background-color: #B6D52E;
+          background-color: #00a82d;
         `;
     }
   }}

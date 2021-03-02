@@ -1,12 +1,14 @@
 import React, {useState, useCallback, useLayoutEffect, useEffect} from 'react';
-import {View, Button, Alert} from 'react-native';
+import {View, Button, Text, Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from '../../types';
 import {useMap} from '../../contexts/maps';
 import {Marker} from 'react-native-maps';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {format} from 'date-fns';
 
-import {Container, Map, Input} from './styles';
+import {Container, Map, Input, Annotation, Details, InfoText} from './styles';
 
 const Note: React.FC<StackScreenProps<RootStackParamList, 'note'>> = ({
   navigation,
@@ -19,6 +21,14 @@ const Note: React.FC<StackScreenProps<RootStackParamList, 'note'>> = ({
   const {addNote} = useMap();
 
   const saveHandler = useCallback(() => {
+    if (!textNote) {
+      Alert.alert(
+        'Ops..',
+        'Parece que você esqueceu de digitar a anotação, tente novamente.',
+      );
+      return;
+    }
+
     const {latitude, longitude} = region;
     addNote({latitude, longitude, text: textNote});
     setTextNote('');
@@ -28,15 +38,17 @@ const Note: React.FC<StackScreenProps<RootStackParamList, 'note'>> = ({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: route.params?.note ? 'Anotação' : 'Nova Anotação',
-      headerRight: ({}) => (
-        <View style={{marginRight: 20}}>
-          <Button
-            title="Salvar"
-            onPress={saveHandler}
-            disabled={!!route.params?.note}
-          />
-        </View>
-      ),
+      headerRight: ({}) => {
+        if (route.params?.note) {
+          return null;
+        }
+
+        return (
+          <View style={{marginRight: 20}}>
+            <Button title="Salvar" onPress={saveHandler} />
+          </View>
+        );
+      },
     });
   }, [navigation, saveHandler, route.params]);
 
@@ -78,18 +90,42 @@ const Note: React.FC<StackScreenProps<RootStackParamList, 'note'>> = ({
           latitudeDelta: 0.001,
           longitudeDelta: 0.001,
         }}>
-        <Marker
-          coordinate={{latitude: region.latitude, longitude: region.longitude}}
-        />
+        {route.params?.note && (
+          <Marker
+            coordinate={{
+              latitude: region.latitude,
+              longitude: region.longitude,
+            }}
+          />
+        )}
       </Map>
-      <Input
-        placeholder="Escreva aqui sua anotação..."
-        value={textNote}
-        onChangeText={(txt) => setTextNote(txt)}
-        multiline
-        editable={!route.params?.note}
-        textAlignVertical="top"
-      />
+      {route.params?.note ? (
+        <>
+          <Details>
+            <InfoText>
+              <Icon name="calendar" size={20} />{' '}
+              {format(
+                new Date(route.params.note.date),
+                "dd/MM/yyyy 'às' HH:mm",
+              )}
+            </InfoText>
+            {route.params.note.isSync && (
+              <InfoText>
+                <Icon name="cloud" size={20} /> Sincronizado
+              </InfoText>
+            )}
+          </Details>
+          <Annotation>{textNote}</Annotation>
+        </>
+      ) : (
+        <Input
+          placeholder="Escreva aqui sua anotação..."
+          value={textNote}
+          onChangeText={(txt) => setTextNote(txt)}
+          multiline
+          textAlignVertical="top"
+        />
+      )}
     </Container>
   );
 };

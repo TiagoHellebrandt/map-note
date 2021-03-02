@@ -20,3 +20,20 @@ export const Input = styled.TextInput`
   justify-content: flex-start;
   align-items: flex-start;
 `;
+
+export const Annotation = styled.Text`
+  font-size: 18px;
+  padding: 5px;
+  padding-top: 20px;
+`;
+
+export const Details = styled.View`
+  margin: 5px;
+  margin-top: 15px;
+  justify-content: space-between;
+  flex-direction: row;
+`;
+
+export const InfoText = styled.Text`
+  font-size: 16px;
+`;

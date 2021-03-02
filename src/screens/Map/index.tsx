@@ -1,13 +1,30 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import {useMap} from '../../contexts/maps';
 import {StackScreenProps} from '@react-navigation/stack';
-
+import {syncNotes} from '../../services/sync';
 import FloatingButton from '../../components/FloatingButton';
 
 const Map: React.FC<StackScreenProps<{}>> = ({navigation}) => {
-  const {notes} = useMap();
+  const {notes, setNotes} = useMap();
+
+  const syncHandler = useCallback(async () => {
+    const ids = await syncNotes(notes);
+
+    setNotes((prev) =>
+      prev.map((note) => {
+        if (ids.includes(note.id)) {
+          return {
+            ...note,
+            isSync: true,
+          };
+        }
+
+        return note;
+      }),
+    );
+  }, [notes, setNotes]);
 
   return (
     <>
@@ -22,7 +39,8 @@ const Map: React.FC<StackScreenProps<{}>> = ({navigation}) => {
           />
         ))}
       </MapView>
-      <FloatingButton label="+" onPress={() => navigation.navigate('note')} />
+      <FloatingButton icon="refresh" theme="secondary" onPress={syncHandler} />
+      <FloatingButton icon="plus" onPress={() => navigation.navigate('note')} />
     </>
   );
 };
