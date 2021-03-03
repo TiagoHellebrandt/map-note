@@ -7,7 +7,7 @@ interface ContainerProps {
 export const Container = styled.TouchableOpacity<ContainerProps>`
   position: absolute;
   right: 10px;
-  bottom: 10px;
+  bottom: 20px;
   text-align: center;
   width: 60px;
   height: 60px;
@@ -23,11 +23,9 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
         `;
       case 'secondary':
         return css`
-          width: 40px;
-          height: 40px;
-          background-color: #ddd;
+          background-color: #999;
           right: 10px;
-          top: 60px;
+          bottom: 90px;
         `;
       default:
         return css`

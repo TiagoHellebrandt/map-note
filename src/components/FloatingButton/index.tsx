@@ -17,12 +17,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
 }) => {
   return (
     <Container theme={theme} {...props}>
-      {icon && (
-        <Icon
-          name={icon}
-          color={theme === 'primary' || !theme ? '#fff' : '#000'}
-        />
-      )}
+      {icon && <Icon name={icon} color={'#fff'} size={18} />}
       {label && <Label>{label}</Label>}
     </Container>
   );
